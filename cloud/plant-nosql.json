@@ -1,0 +1,15 @@
+{
+    "plant" : {
+        "Aglaonema" : {
+            "plant_name" : "",
+            "plant_latin_name" : "",
+            "plant_market_price" : "",
+            "plant_description" : "",
+            "plant_best_placing" : "",
+            "plant_likes" : "",
+            "plant_care" : [
+                ""
+            ]
+        }
+    }
+}
