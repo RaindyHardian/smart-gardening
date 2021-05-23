@@ -8,19 +8,23 @@ import (
 )
 
 type Server struct {
-	RunMode  string
-	HttpPort string
+	HttpPort                  string
+	GoogleStorageBucket       string
+	GoogleProjectID           string
+	GoogleFirestoreCollection string
 }
 
 var ServerSetting = &Server{}
 
 func init() {
 	if err := godotenv.Load(); err != nil {
-		log.Fatal("Error loading .env file")
+		log.Fatal(err)
 	}
 }
 
 func Setup() {
-	ServerSetting.RunMode = os.Getenv("GIN_MODE")
 	ServerSetting.HttpPort = os.Getenv("HTTP_PORT")
+	ServerSetting.GoogleStorageBucket = os.Getenv("GOOGLE_STORAGE_BUCKET")
+	ServerSetting.GoogleProjectID = os.Getenv("GOOGLE_PROJECT_ID")
+	ServerSetting.GoogleFirestoreCollection = os.Getenv("GOOGLE_FIRESTORE_COLLECTION")
 }

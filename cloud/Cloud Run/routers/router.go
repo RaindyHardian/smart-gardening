@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"bangkit.academy/smartgardening/cloudrun/routers/api"
+	"bangkit.academy/smartgardening/cloudrun/controllers"
 	"github.com/gin-gonic/gin"
 )
 
@@ -10,8 +10,9 @@ func Setup() *gin.Engine {
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
-	r.GET("/", api.IndexGet)
-	r.POST("/flower", api.FlowerEndpoint)
+	r.GET("/", controllers.IndexGet)
+	r.POST("/detection", controllers.Detection)
+	r.GET("/plant", controllers.GetDataByName)
 
 	return r
 }
