@@ -15,14 +15,14 @@
             ]
         },
         "Kuping Gajah": {
-            "plant_name": "Kuping Gajah",
-            "plant_latin_name": "Anthurium",
-            "plant_market_price": "Rp 25.000,00 - Rp 500.000,00",
-            "plant_description": "The main attraction of the anthurium is its beautiful, unique and varied leaf shape. The leaves are generally dark green with large, prominent leaf veins and bones. So that it makes the figure of this plant look sturdy but still exudes elegance when it comes to adulthood",
-            "plant_habitat": "Tropical Rain Forest",
-            "plant_best_placing": "Place in areas with low radiation intensity and high humidity (do not put under direct sunlight)",
-            "plant_picture": "**place with image link**",
-            "plant_disease": [
+            "name": "Kuping Gajah",
+            "latinName": "Anthurium",
+            "marketPrice": "Rp 25.000,00 - Rp 500.000,00",
+            "description": "The main attraction of the anthurium is its beautiful, unique and varied leaf shape. The leaves are generally dark green with large, prominent leaf veins and bones. So that it makes the figure of this plant look sturdy but still exudes elegance when it comes to adulthood",
+            "habitat": "Tropical Rain Forest",
+            "bestPlacing": "Place in areas with low radiation intensity and high humidity (do not put under direct sunlight)",
+            "picture": "**place with image link**",
+            "disesase": [
                 "Hawar Daun Jamur",
                 "Bintik Daun Phyllosticta",
                 "Phytium",
@@ -30,27 +30,27 @@
             ]
         },
         "Lipstik Gantung": {
-            "plant_name": "Tanaman Bunga Lipstick",
-            "plant_latin_name": "Aeschynanthus radicans",
-            "plant_market_price": "Rp 15.000,00 - Rp 80.000,00",
-            "plant_description": "Lipstick Plant name comes from the scarlet flowers that open from buds resembling tubes of lipstick.",
-            "plant_habitat": "Humid Tropics",
-            "plant_best_placing": "This Plant is excellence as an interior plant and is perfect for hanging basket. It requires a great deal of light, but not direct sunlight. Humidity is also noted as having an important positive effect.",
-            "plant_picture": "**place with image link**",
-            "plant_disease": [
+            "name": "Tanaman Bunga Lipstick",
+            "latinName": "Aeschynanthus radicans",
+            "marketPrice": "Rp 15.000,00 - Rp 80.000,00",
+            "description": "Lipstick Plant name comes from the scarlet flowers that open from buds resembling tubes of lipstick.",
+            "habitat": "Humid Tropics",
+            "bestPlacing": "This Plant is excellence as an interior plant and is perfect for hanging basket. It requires a great deal of light, but not direct sunlight. Humidity is also noted as having an important positive effect.",
+            "picture": "**place with image link**",
+            "disease": [
                 "Tungau laba-laba",
                 ""
             ]
         },
         "Suplir": {
-            "plant_name": "Suplir",
-            "plant_latin_name": "Adiantum",
-            "plant_market_price": "Rp 30.000,00 - Rp 100.000,00",
-            "plant_description": "has a distinctive frond (ental) appearance",
-            "plant_habitat": "Humid and wet except in snow areas and sheltered places such as mountain slopes.",
-            "plant_best_placing": "Can be interior and eksterior plant, This plant cannot withstand direct sunlight. Suplir is attracted to growing media that is fertile, rich in organic matter (humus), and is always moist, but is not tolerant of puddles. It likes fertilizing with a higher nitrogen content. Spore formation requires additional phosphorus and potassium.",
-            "plant_picture": "**place with image link**",
-            "plant_disease": [
+            "name": "Suplir",
+            "latinName": "Adiantum",
+            "marketPrice": "Rp 30.000,00 - Rp 100.000,00",
+            "description": "has a distinctive frond (ental) appearance",
+            "habitat": "Humid and wet except in snow areas and sheltered places such as mountain slopes.",
+            "bestPlacing": "Can be interior and eksterior plant, This plant cannot withstand direct sunlight. Suplir is attracted to growing media that is fertile, rich in organic matter (humus), and is always moist, but is not tolerant of puddles. It likes fertilizing with a higher nitrogen content. Spore formation requires additional phosphorus and potassium.",
+            "picture": "**place with image link**",
+            "disease": [
                 "Rebah Kecambah",
                 "Cendawan Abu Abu",
                 "Lumut",
