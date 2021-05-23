@@ -1,0 +1,65 @@
+{
+    "plant": {
+        "Aglaonema": {
+            "name": "Aglaonema / Sri Rezeki",
+            "latinName": "Aglaonema Commutatum",
+            "marketPrice": "Rp 20.000,00 - Rp 200.000,00",
+            "description": "This plant has more than 30 species and the leaves are its uniqueness",
+            "habitat": "Tropical Rain Forest",
+            "bestPlacing": "Place in areas with low radiation intensity and high humidity",
+            "picture": "**place with image link**",
+            "disease": [
+                "Kutu Putih",
+                "Tungau Laba-Laba",
+                "Kutu Daun"
+            ]
+        },
+        "Kuping Gajah": {
+            "name": "Kuping Gajah",
+            "latinName": "Anthurium",
+            "marketPrice": "Rp 25.000,00 - Rp 500.000,00",
+            "description": "The main attraction of the anthurium is its beautiful, unique and varied leaf shape. The leaves are generally dark green with large, prominent leaf veins and bones. So that it makes the figure of this plant look sturdy but still exudes elegance when it comes to adulthood",
+            "habitat": "Tropical Rain Forest",
+            "bestPlacing": "Place in areas with low radiation intensity and high humidity (do not put under direct sunlight)",
+            "picture": "**place with image link**",
+            "disesase": [
+                "Hawar Daun Jamur",
+                "Bintik Daun Phyllosticta",
+                "Phytium",
+                "Nematoda"
+            ]
+        },
+        "Lipstik Gantung": {
+            "name": "Tanaman Bunga Lipstick",
+            "latinName": "Aeschynanthus radicans",
+            "marketPrice": "Rp 15.000,00 - Rp 80.000,00",
+            "description": "Lipstick Plant name comes from the scarlet flowers that open from buds resembling tubes of lipstick.",
+            "habitat": "Humid Tropics",
+            "bestPlacing": "This Plant is excellence as an interior plant and is perfect for hanging basket. It requires a great deal of light, but not direct sunlight. Humidity is also noted as having an important positive effect.",
+            "picture": "**place with image link**",
+            "disease": [
+                "Tungau laba-laba",
+                ""
+            ]
+        },
+        "Suplir": {
+            "name": "Suplir",
+            "latinName": "Adiantum",
+            "marketPrice": "Rp 30.000,00 - Rp 100.000,00",
+            "description": "has a distinctive frond (ental) appearance",
+            "habitat": "Humid and wet except in snow areas and sheltered places such as mountain slopes.",
+            "bestPlacing": "Can be interior and eksterior plant, This plant cannot withstand direct sunlight. Suplir is attracted to growing media that is fertile, rich in organic matter (humus), and is always moist, but is not tolerant of puddles. It likes fertilizing with a higher nitrogen content. Spore formation requires additional phosphorus and potassium.",
+            "picture": "**place with image link**",
+            "disease": [
+                "Rebah Kecambah",
+                "Cendawan Abu Abu",
+                "Lumut",
+                "Algae",
+                ""
+            ]
+        }
+    },
+    "Disease": {
+        "Kutu Putih": {}
+    }
+}
