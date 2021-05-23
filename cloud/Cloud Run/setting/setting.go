@@ -18,7 +18,7 @@ var ServerSetting = &Server{}
 
 func init() {
 	if err := godotenv.Load(); err != nil {
-		log.Fatal(err)
+		log.Printf("[INFO] %v", err)
 	}
 }
 
