@@ -3,6 +3,7 @@ package com.pistachio.smartgardening.ui.camera
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -25,6 +26,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.pistachio.smartgardening.R
 import com.pistachio.smartgardening.databinding.ActivityCameraBinding
+import com.pistachio.smartgardening.ui.data.PlantEntity
+import com.pistachio.smartgardening.ui.detail.DetailActivity
 import kotlinx.android.synthetic.main.activity_camera.*
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.Interpreter
@@ -68,6 +71,8 @@ class CameraActivity : AppCompatActivity() {
     private val PROBABILITY_STD = 255.0f
     private lateinit var bitmap: Bitmap
     private var labels: List<String>? = null
+
+    private lateinit var imagePath: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -136,7 +141,7 @@ class CameraActivity : AppCompatActivity() {
                 inputImageBuffer?.getBuffer(),
                 outputProbabilityBuffer!!.getBuffer().rewind()
             )
-            showresult()
+            showresult(imagePath)
         }
     }
 
@@ -168,7 +173,7 @@ class CameraActivity : AppCompatActivity() {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val savedUri = Uri.fromFile(photoFile)
                     val msg = "Photo capture succeeded: $savedUri"
-                    Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(baseContext, photoFile.absolutePath, Toast.LENGTH_SHORT).show()
                     Log.d(TAG, msg)
 
                     var oriBitmap: Bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
@@ -184,6 +189,8 @@ class CameraActivity : AppCompatActivity() {
 
                     binding.buttonConfirmation.visibility = View.VISIBLE
                     binding.cameraCaptureButton.visibility = View.GONE
+
+                    imagePath = photoFile.absolutePath
 
                     cameraExecutor.shutdown()
                 }
@@ -355,7 +362,7 @@ class CameraActivity : AppCompatActivity() {
         return NormalizeOp(PROBABILITY_MEAN, PROBABILITY_STD)
     }
 
-    private fun showresult() {
+    private fun showresult(imagePath: String?) {
         try {
             labels = FileUtil.loadLabels(this, "PlantModel.txt")
         } catch (e: java.lang.Exception) {
@@ -367,11 +374,15 @@ class CameraActivity : AppCompatActivity() {
         val maxValueInMap = Collections.max(labeledProbability.values)
         for ((key, value) in labeledProbability) {
             if (value == maxValueInMap) {
-                Toast.makeText(
+                /*Toast.makeText(
                     this,
-                    "Object: ${key}",
+                    key,
                     Toast.LENGTH_LONG
-                ).show()
+                ).show()*/
+                val plantEntity = PlantEntity(name = key, imagePath = imagePath)
+                val moveDetail = Intent(this@CameraActivity, DetailActivity::class.java)
+                moveDetail.putExtra(DetailActivity.EXTRA_PLANT, plantEntity)
+                startActivity(moveDetail)
             }
         }
         Log.d("PROB", labeledProbability.toString())
