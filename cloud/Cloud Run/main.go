@@ -13,7 +13,7 @@ func init() {
 }
 
 func main() {
-	port := fmt.Sprintf(":%s", setting.ServerSetting.HttpPort)
+	port := fmt.Sprintf(":%s", setting.ServerSetting.Port)
 
 	r := routers.Setup()
 

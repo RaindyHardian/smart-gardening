@@ -8,7 +8,7 @@ import (
 )
 
 type Server struct {
-	HttpPort                  string
+	Port                      string
 	GoogleStorageBucket       string
 	GoogleProjectID           string
 	GoogleFirestoreCollection string
@@ -23,7 +23,7 @@ func init() {
 }
 
 func Setup() {
-	ServerSetting.HttpPort = os.Getenv("HTTP_PORT")
+	ServerSetting.Port = os.Getenv("PORT")
 	ServerSetting.GoogleStorageBucket = os.Getenv("GOOGLE_STORAGE_BUCKET")
 	ServerSetting.GoogleProjectID = os.Getenv("GOOGLE_PROJECT_ID")
 	ServerSetting.GoogleFirestoreCollection = os.Getenv("GOOGLE_FIRESTORE_COLLECTION")
