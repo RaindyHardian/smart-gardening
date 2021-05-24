@@ -14,7 +14,7 @@ func GetDataByName(c *gin.Context) {
 	name := c.Query("name")
 	data, err := firestore.GetData(context.Background(), client, name)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
+		c.JSON(http.StatusNotFound, gin.H{
 			"detail": err.Error(),
 			"error":  "get data from database failed",
 		})

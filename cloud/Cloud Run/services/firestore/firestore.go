@@ -2,12 +2,12 @@ package firestore
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 
 	"bangkit.academy/smartgardening/cloudrun/setting"
 	"cloud.google.com/go/firestore"
-	"google.golang.org/api/iterator"
 )
 
 func CreateClient(ctx context.Context) *firestore.Client {
@@ -29,18 +29,13 @@ func AddData(ctx context.Context, client *firestore.Client, document string, dat
 	return nil
 }
 
-func GetData(ctx context.Context, client *firestore.Client, name string) ([]map[string]interface{}, error) {
-	iter := client.Collection(setting.ServerSetting.GoogleFirestoreCollection).Where("name", "==", name).Documents(ctx)
-	var data []map[string]interface{}
-	for {
-		doc, err := iter.Next()
-		if err == iterator.Done {
-			break
-		}
-		if err != nil {
-			return nil, err
-		}
-		data = append(data, doc.Data())
+func GetData(ctx context.Context, client *firestore.Client, name string) (map[string]interface{}, error) {
+	doc, err := client.Collection(setting.ServerSetting.GoogleFirestoreCollection).Where("name", "==", name).Documents(ctx).GetAll()
+	if err != nil {
+		return nil, err
 	}
-	return data, nil
+	if len(doc) == 0 {
+		return nil, errors.New("data not found")
+	}
+	return doc[0].Data(), nil
 }
