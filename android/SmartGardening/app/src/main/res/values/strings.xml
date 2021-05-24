@@ -4,4 +4,8 @@
     <string name="description">Description</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus pharetra ex at est vulputate, id ultricies nulla feugiat. Ut ultricies ex dui, eget elementum augue sollicitudin ut. Suspendisse ultricies eu ipsum vitae convallis. Proin augue urna, auctor quis ex eget, varius sodales ipsum egestas.</string>
     <string name="plant_latin_name">Plant Latin Name</string>
+    <string name="habitat">Habitat:</string>
+    <string name="best_placing">Best placed at:</string>
+    <string name="market_price">Market price:</string>
+    <string name="possible_diseases">Possible diseases:</string>
 </resources>

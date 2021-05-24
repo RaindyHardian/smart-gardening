@@ -53,6 +53,8 @@ import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
+import java.io.InputStream
+import java.net.URL
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
 import java.text.SimpleDateFormat
@@ -135,19 +137,32 @@ class CameraActivity : AppCompatActivity() {
                     response: Response<ListPlantResponse>
                 ) {
                     if (response.isSuccessful) {
-                        Log.d("API SUCCESS", response.body()?.plant.toString())
+                        Log.d("API SUCCESS","Photo Uploaded")
+
+                        //Dummy Plant
+                        val plantEntity = PlantEntity(
+                            0,
+                            "P_01",
+                            "Aglaonema",
+                            "Aglaonema Commutatum",
+                            "This plant has more than 30 species and the leaves are its uniqueness",
+                            "Tropical Rain Forest",
+                            "Place in areas with low radiation intensity and high humidity",
+                            listOf("Kutu Putih", "Tungau Laba-Laba", "Kutu Daun"),
+                            "Rp 20.000,00 - Rp 200.000,00",
+                            imagePath
+                        )
 
                         // if success then send the response to detail -> use response.body()?.plant or convert into Entity
-//                        val plantEntity = PlantEntity(name = key, imagePath = imagePath)
-//                        val moveDetail = Intent(this@CameraActivity, DetailActivity::class.java)
-//                        moveDetail.putExtra(DetailActivity.EXTRA_PLANT, plantEntity)
-//                        startActivity(moveDetail)
+                        val moveDetail = Intent(this@CameraActivity, DetailActivity::class.java)
+                        moveDetail.putExtra(DetailActivity.EXTRA_PLANT, plantEntity)
+                        startActivity(moveDetail)
 
-                        Toast.makeText(
+                        /*Toast.makeText(
                             this@CameraActivity,
-                            "UPLOAD SUCCESS",
+                            response.body()?.plant.toString(),
                             Toast.LENGTH_LONG
-                        ).show()
+                        ).show()*/
                     } else {
                         Log.e(
                             "API NOT SUCESS",
@@ -201,7 +216,7 @@ class CameraActivity : AppCompatActivity() {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val savedUri = Uri.fromFile(photoFile)
                     val msg = "Photo capture succeeded: $savedUri"
-                    Toast.makeText(baseContext, photoFile.absolutePath, Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(baseContext, photoFile.absolutePath, Toast.LENGTH_SHORT).show()
                     Log.d(TAG, msg)
 
                     var oriBitmap: Bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
@@ -388,7 +403,7 @@ class CameraActivity : AppCompatActivity() {
         return NormalizeOp(PROBABILITY_MEAN, PROBABILITY_STD)
     }
 
-    private fun showresult(imagePath: String?) {
+    private fun showresult(imagePath: String) {
         try {
             labels = FileUtil.loadLabels(this, "PlantModel.txt")
         } catch (e: java.lang.Exception) {
