@@ -25,10 +25,19 @@ import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.pistachio.smartgardening.R
+import com.pistachio.smartgardening.data.source.remote.network.ApiConfig
+import com.pistachio.smartgardening.data.source.remote.response.ListPlantResponse
 import com.pistachio.smartgardening.databinding.ActivityCameraBinding
 import com.pistachio.smartgardening.ui.data.PlantEntity
 import com.pistachio.smartgardening.ui.detail.DetailActivity
 import kotlinx.android.synthetic.main.activity_camera.*
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.support.common.FileUtil
@@ -73,6 +82,7 @@ class CameraActivity : AppCompatActivity() {
     private var labels: List<String>? = null
 
     private lateinit var imagePath: String
+    private lateinit var imageFile: File
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,11 +107,11 @@ class CameraActivity : AppCompatActivity() {
 
         cameraExecutor = Executors.newSingleThreadExecutor()
 
-        try {
-            tflite = Interpreter(loadmodelfile(this))
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace()
-        }
+//        try {
+//            tflite = Interpreter(loadmodelfile(this))
+//        } catch (e: java.lang.Exception) {
+//            e.printStackTrace()
+//        }
 
         binding.btnRecapture.setOnClickListener {
             img_saved.visibility = View.GONE
@@ -113,35 +123,53 @@ class CameraActivity : AppCompatActivity() {
             cameraExecutor = Executors.newSingleThreadExecutor()
         }
 
-        binding.btnConfirm.setOnClickListener{
-            val imageTensorIndex = 0
-            val imageShape =
-                tflite!!.getInputTensor(imageTensorIndex).shape() // {1, height, width, 3}
+        binding.btnConfirm.setOnClickListener {
+            // SEND API
+            var requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), imageFile)
+            val body: MultipartBody.Part =
+                MultipartBody.Part.createFormData("image", imageFile.name, requestFile)
+            val client = ApiConfig.getApiService().postImage(body)
+            client.enqueue(object : Callback<ListPlantResponse> {
+                override fun onResponse(
+                    call: Call<ListPlantResponse>,
+                    response: Response<ListPlantResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        Log.d("API SUCCESS", response.body()?.plant.toString())
 
-            imageSizeY = imageShape[1]
-            imageSizeX = imageShape[2]
-            val imageDataType: DataType = tflite!!.getInputTensor(imageTensorIndex).dataType()
+                        // if success then send the response to detail -> use response.body()?.plant or convert into Entity
+//                        val plantEntity = PlantEntity(name = key, imagePath = imagePath)
+//                        val moveDetail = Intent(this@CameraActivity, DetailActivity::class.java)
+//                        moveDetail.putExtra(DetailActivity.EXTRA_PLANT, plantEntity)
+//                        startActivity(moveDetail)
 
-            val probabilityTensorIndex = 0
-            val probabilityShape =
-                tflite!!.getOutputTensor(probabilityTensorIndex).shape() // {1, NUM_CLASSES}
+                        Toast.makeText(
+                            this@CameraActivity,
+                            "UPLOAD SUCCESS",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else {
+                        Log.e(
+                            "API NOT SUCESS",
+                            "UPLOADED BUT ERROR: ${response.message()} & ${response.body()?.error.toString()}"
+                        )
+                        Toast.makeText(
+                            this@CameraActivity,
+                            "UPLOADED BUT ERROR : ${response.body()?.error.toString()}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
 
-            val probabilityDataType: DataType =
-                tflite!!.getOutputTensor(probabilityTensorIndex).dataType()
-
-            inputImageBuffer = TensorImage(imageDataType)
-            outputProbabilityBuffer =
-                TensorBuffer.createFixedSize(probabilityShape, probabilityDataType)
-            probabilityProcessor =
-                TensorProcessor.Builder().add(getPostprocessNormalizeOp()).build()
-
-            inputImageBuffer = loadImage(bitmap)
-
-            tflite!!.run(
-                inputImageBuffer?.getBuffer(),
-                outputProbabilityBuffer!!.getBuffer().rewind()
-            )
-            showresult(imagePath)
+                override fun onFailure(call: Call<ListPlantResponse>, t: Throwable) {
+                    Log.e("API FAIL", "onFailure: ${t.message.toString()}")
+                    Toast.makeText(
+                        this@CameraActivity,
+                        "ON FAILURE ERROR: ${t.message.toString()}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            })
         }
     }
 
@@ -178,9 +206,6 @@ class CameraActivity : AppCompatActivity() {
 
                     var oriBitmap: Bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
 
-//                    val rotateImage = getCameraPhotoOrientation(photoFile.absolutePath)
-//                    binding.imgSaved.rotation = rotateImage.toFloat()
-
                     bitmap = rotateImageIfRequired(oriBitmap, savedUri)
                     binding.imgSaved.setImageBitmap(bitmap)
 
@@ -191,6 +216,7 @@ class CameraActivity : AppCompatActivity() {
                     binding.cameraCaptureButton.visibility = View.GONE
 
                     imagePath = photoFile.absolutePath
+                    imageFile = photoFile
 
                     cameraExecutor.shutdown()
                 }
