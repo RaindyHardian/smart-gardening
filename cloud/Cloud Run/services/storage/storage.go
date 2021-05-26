@@ -11,8 +11,6 @@ import (
 )
 
 func Upload(image multipart.File, object string, bucket string) (interface{}, error) {
-	defer image.Close()
-
 	ctx := context.Background()
 	client, err := storage.NewClient(ctx)
 	if err != nil {
@@ -31,5 +29,5 @@ func Upload(image multipart.File, object string, bucket string) (interface{}, er
 		return nil, fmt.Errorf("Writer.Close: %v", err)
 	}
 
-	return fmt.Sprintf("Upload Success generated filename: %v", wc.Attrs().Name), nil
+	return wc.Attrs().Name, nil
 }
