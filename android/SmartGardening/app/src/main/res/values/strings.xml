@@ -8,4 +8,8 @@
     <string name="best_placing">Best placed at:</string>
     <string name="market_price">Market price:</string>
     <string name="possible_diseases">Possible diseases:</string>
+    <string name="plant_image">Image of Plant</string>
+    <string name="clear_history">Clear History</string>
+    <string name="clear_history_message">You won\'t be able to undo this action</string>
+    <string name="no_history">No Detection History</string>
 </resources>

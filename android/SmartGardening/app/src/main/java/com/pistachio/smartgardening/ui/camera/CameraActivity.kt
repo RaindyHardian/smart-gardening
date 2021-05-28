@@ -28,17 +28,16 @@ import com.pistachio.smartgardening.R
 import com.pistachio.smartgardening.data.source.remote.network.ApiConfig
 import com.pistachio.smartgardening.data.source.remote.response.ListPlantResponse
 import com.pistachio.smartgardening.databinding.ActivityCameraBinding
-import com.pistachio.smartgardening.ui.data.PlantEntity
+import com.pistachio.smartgardening.data.PlantEntity
 import com.pistachio.smartgardening.ui.detail.DetailActivity
+import com.pistachio.smartgardening.utils.DummyData
 import kotlinx.android.synthetic.main.activity_camera.*
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import org.tensorflow.lite.DataType
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.support.common.FileUtil
 import org.tensorflow.lite.support.common.TensorOperator
@@ -53,8 +52,6 @@ import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
-import java.io.InputStream
-import java.net.URL
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
 import java.text.SimpleDateFormat
@@ -64,7 +61,7 @@ import java.util.concurrent.Executors
 
 class CameraActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCameraBinding
-
+    private lateinit var dummyPlants: List<PlantEntity>
     private var imageCapture: ImageCapture? = null
 
     private lateinit var outputDirectory: File
@@ -101,6 +98,7 @@ class CameraActivity : AppCompatActivity() {
                 this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
             )
         }
+        dummyPlants = DummyData.generateDummyPlants()
 
         binding.cameraCaptureButton.setOnClickListener { takePhoto() }
         binding.viewFinder.scaleType = PreviewView.ScaleType.FIT_CENTER
@@ -138,24 +136,15 @@ class CameraActivity : AppCompatActivity() {
                 ) {
                     if (response.isSuccessful) {
                         Log.d("API SUCCESS","Photo Uploaded")
-
                         //Dummy Plant
-                        val plantEntity = PlantEntity(
-                            0,
-                            "P_01",
-                            "Aglaonema",
-                            "Aglaonema Commutatum",
-                            "This plant has more than 30 species and the leaves are its uniqueness",
-                            "Tropical Rain Forest",
-                            "Place in areas with low radiation intensity and high humidity",
-                            listOf("Kutu Putih", "Tungau Laba-Laba", "Kutu Daun"),
-                            "Rp 20.000,00 - Rp 200.000,00",
-                            imagePath
-                        )
+                        var random = (dummyPlants.indices).random()
+
+                        dummyPlants[random].imagePath = imagePath
 
                         // if success then send the response to detail -> use response.body()?.plant or convert into Entity
                         val moveDetail = Intent(this@CameraActivity, DetailActivity::class.java)
-                        moveDetail.putExtra(DetailActivity.EXTRA_PLANT, plantEntity)
+                        moveDetail.putExtra(DetailActivity.EXTRA_PLANT, dummyPlants[random])
+                        moveDetail.putExtra(DetailActivity.EXTRA_STATUS,200)
                         startActivity(moveDetail)
 
                         /*Toast.makeText(
@@ -321,7 +310,7 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
-    private fun getCameraPhotoOrientation(imagePath: String?): Int {
+    private fun getCameraPhotoOrientation(imagePath: String): Int {
         var rotate = 0
         try {
             val imageFile = File(imagePath)

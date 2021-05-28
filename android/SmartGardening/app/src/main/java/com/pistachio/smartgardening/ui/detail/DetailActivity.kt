@@ -1,43 +1,41 @@
 package com.pistachio.smartgardening.ui.detail
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.media.ExifInterface
-import android.net.Uri
 import android.os.Bundle
-import android.view.View
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.TransformationUtils.rotateImage
 import com.pistachio.smartgardening.databinding.ActivityDetailBinding
 import com.pistachio.smartgardening.databinding.PlantDetailBinding
-import com.pistachio.smartgardening.ui.data.PlantEntity
+import com.pistachio.smartgardening.data.PlantEntity
+import com.pistachio.smartgardening.utils.ViewModelFactory
 import java.io.File
-import java.io.IOException
 
 
 class DetailActivity : AppCompatActivity() {
     companion object{
         const val EXTRA_PLANT = "extra_plant"
+        const val EXTRA_STATUS = "extra_status"
     }
     private lateinit var binding: ActivityDetailBinding
     private lateinit var detailBinding: PlantDetailBinding
-
+    private lateinit var viewModel: DetailViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         detailBinding = binding.detailContent
 
         setContentView(binding.root)
+        supportActionBar?.title = "Plant Details"
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val plant = intent.getParcelableExtra<PlantEntity>(EXTRA_PLANT) as PlantEntity
-
+        val status = intent.getIntExtra(EXTRA_STATUS, 404)
+        val factory = ViewModelFactory.getInstance(this.application)
+        viewModel = ViewModelProvider(this, factory)[DetailViewModel::class.java]
         loadPlant(plant)
-
-        detailBinding.cardView.setOnClickListener {
-            Toast.makeText(this,plant.imagePath,Toast.LENGTH_SHORT).show()
+        if(status == 200) {
+            viewModel.insert(plant)
         }
     }
 
@@ -65,6 +63,16 @@ class DetailActivity : AppCompatActivity() {
 
         if (imgFile.exists()) {
             Glide.with(this).load(imgFile).into(detailBinding.imgPlant)
+        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        val status = intent.getIntExtra(EXTRA_STATUS, 404)
+        return if(status == 200){
+            super.onSupportNavigateUp()
+        }else{
+            onBackPressed()
+            true
         }
     }
 }

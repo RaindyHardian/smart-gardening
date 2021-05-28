@@ -1,4 +1,4 @@
-package com.pistachio.smartgardening.ui.data
+package com.pistachio.smartgardening.data
 
 import android.net.Uri
 import android.os.Parcelable
