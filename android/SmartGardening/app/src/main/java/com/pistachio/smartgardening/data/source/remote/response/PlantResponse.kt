@@ -8,7 +8,7 @@ data class PlantResponse(
     val marketPrice: String? = null,
 
     @field:SerializedName("disease")
-    val disease: List<String?>? = null,
+    val disease: List<String>? = null,
 
     @field:SerializedName("habitat")
     val habitat: String? = null,

@@ -1,13 +1,12 @@
 package com.pistachio.smartgardening.ui.detail
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.pistachio.smartgardening.data.PlantEntity
 import com.pistachio.smartgardening.databinding.ActivityDetailBinding
 import com.pistachio.smartgardening.databinding.PlantDetailBinding
-import com.pistachio.smartgardening.data.PlantEntity
 import com.pistachio.smartgardening.utils.ViewModelFactory
 import java.io.File
 
