@@ -37,6 +37,7 @@ class PlantAdapter : RecyclerView.Adapter<PlantAdapter.PlantViewHolder>() {
         fun bind(plantEntity: PlantEntity) {
             with(binding) {
                 txtPlantName.text = plantEntity.name
+                txtPlantLocation.text = plantEntity.location
                 val imgFile = File(plantEntity.imagePath)
                 if (imgFile.exists()) {
                     Glide.with(itemView.context).load(imgFile).into(imgItemPhoto)

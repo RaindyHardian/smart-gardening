@@ -4,21 +4,19 @@ import com.pistachio.smartgardening.data.PlantEntity
 import com.pistachio.smartgardening.data.source.remote.response.PlantResponse
 
 object DataMapper {
-    fun mapResponsesToEntities(input: List<PlantResponse>): PlantEntity {
-        input.map {
-            return PlantEntity(
-                dbId = 0,
-                plantId = it.id!!,
-                name = it.name!!,
-                latinName = it.latinName!!,
-                description = it.description!!,
-                habitat = it.habitat!!,
-                bestPlacing = it.bestPlacing!!,
-                disease = it.disease!!,
-                marketPrice = it.marketPrice!!,
-                imagePath = it.picture!!
-            )
-        }
-        return PlantEntity()
+    fun mapResponsesToEntities(input: PlantResponse, location: String): PlantEntity {
+        return PlantEntity(
+            dbId = 0,
+            plantId = input.id,
+            name = input.name,
+            latinName = input.latinName,
+            description = input.description,
+            habitat = input.habitat,
+            bestPlacing = input.bestPlacing,
+            disease = input.disease!!,
+            marketPrice = input.marketPrice,
+            imagePath = input.picture,
+            location = location
+        )
     }
 }

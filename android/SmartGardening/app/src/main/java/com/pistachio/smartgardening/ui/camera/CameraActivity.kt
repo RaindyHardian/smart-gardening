@@ -7,14 +7,17 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import android.location.Address
+import android.location.Geocoder
+import android.location.Location
 import android.media.ExifInterface
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.util.Size
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -23,14 +26,17 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.tasks.CancellationTokenSource
+import com.google.android.gms.tasks.Task
 import com.pistachio.smartgardening.R
 import com.pistachio.smartgardening.data.source.remote.network.ApiConfig
 import com.pistachio.smartgardening.data.source.remote.response.ListPlantResponse
 import com.pistachio.smartgardening.databinding.ActivityCameraBinding
-import com.pistachio.smartgardening.data.PlantEntity
 import com.pistachio.smartgardening.ui.detail.DetailActivity
 import com.pistachio.smartgardening.utils.DataMapper
-import com.pistachio.smartgardening.utils.DummyData
 import kotlinx.android.synthetic.main.activity_camera.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -42,12 +48,13 @@ import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class CameraActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCameraBinding
-    private lateinit var dummyPlants: List<PlantEntity>
+
     private var imageCapture: ImageCapture? = null
 
     private lateinit var outputDirectory: File
@@ -56,6 +63,20 @@ class CameraActivity : AppCompatActivity() {
     private lateinit var bitmap: Bitmap
 
     private lateinit var imageFile: File
+
+    // Location
+    // The Fused Location Provider provides access to location APIs.
+    private val fusedLocationClient: FusedLocationProviderClient by lazy {
+        LocationServices.getFusedLocationProviderClient(applicationContext)
+    }
+
+    // Allows class to cancel the location request if it exits the activity.
+    // Typically, you use one cancellation source per lifecycle.
+    private var cancellationTokenSource = CancellationTokenSource()
+
+    private var latitude: Double = 0.0
+    private var longitude: Double = 0.0
+    private var city = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,13 +87,13 @@ class CameraActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         if (allPermissionsGranted()) {
+            requestCurrentLocation()
             startCamera()
         } else {
             ActivityCompat.requestPermissions(
                 this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
             )
         }
-        dummyPlants = DummyData.generateDummyPlants()
 
         binding.cameraCaptureButton.setOnClickListener { takePhoto() }
         binding.viewFinder.scaleType = PreviewView.ScaleType.FIT_CENTER
@@ -106,16 +127,16 @@ class CameraActivity : AppCompatActivity() {
                     binding.progressBar.visibility = View.GONE
                     if (response.isSuccessful) {
                         Log.d("API SUCCESS", "Photo Uploaded")
-                        //Dummy Plant
-                        var random = (dummyPlants.indices).random()
-
-                        dummyPlants[random].imagePath = imageFile.absolutePath
 
                         // if success then send the response to detail -> use response.body()?.plant or convert into Entity
-                        // val plantData = DataMapper.mapResponsesToEntities(response.body()?.plant!!)
+                        val plantData = response.body()?.plant?.let { it1 ->
+                            DataMapper.mapResponsesToEntities(
+                                it1, city)
+                        }
+                        plantData?.imagePath = imageFile.absolutePath
 
                         val moveDetail = Intent(this@CameraActivity, DetailActivity::class.java)
-                        moveDetail.putExtra(DetailActivity.EXTRA_PLANT, dummyPlants[random])
+                        moveDetail.putExtra(DetailActivity.EXTRA_PLANT, plantData)
                         moveDetail.putExtra(DetailActivity.EXTRA_STATUS, 200)
                         startActivity(moveDetail)
                         finish()
@@ -189,6 +210,8 @@ class CameraActivity : AppCompatActivity() {
                     imageFile = photoFile
 
                     cameraExecutor.shutdown()
+
+                    getLastLocation()
                 }
             })
     }
@@ -249,13 +272,15 @@ class CameraActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         cameraExecutor.shutdown()
+        cancellationTokenSource.cancel()
     }
 
     companion object {
         private const val TAG = "CameraXBasic"
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private const val REQUEST_CODE_PERMISSIONS = 10
-        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+        private val REQUIRED_PERMISSIONS =
+            arrayOf(Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
     override fun onRequestPermissionsResult(
@@ -300,5 +325,78 @@ class CameraActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return super.onSupportNavigateUp()
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun requestCurrentLocation() {
+        val currentLocationTask: Task<Location> = fusedLocationClient.getCurrentLocation(
+            PRIORITY_HIGH_ACCURACY,
+            cancellationTokenSource.token
+        )
+
+        currentLocationTask.addOnCompleteListener { task: Task<Location> ->
+            val result: Location
+            if (task.isSuccessful && task.result != null) {
+                result = task.result
+
+                val gcd = Geocoder(this, Locale.getDefault())
+                var addresses: List<Address>? = null
+                try {
+                    addresses = gcd.getFromLocation(result.latitude, result.longitude, 1)
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+
+                val subAdmin: String
+                if (addresses != null && addresses.isNotEmpty()) {
+                    subAdmin = addresses[0].subAdminArea
+
+                    latitude = result.latitude
+                    longitude = result.longitude
+                    city = subAdmin
+                } else {
+                    latitude = 0.0
+                    longitude = 0.0
+                    city = ""
+                }
+            } else {
+                latitude = 0.0
+                longitude = 0.0
+                city = ""
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun getLastLocation() {
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { result: Location? ->
+                if (result != null) {
+                    val gcd = Geocoder(this, Locale.getDefault())
+                    var addresses: List<Address>? = null
+                    try {
+                        addresses = gcd.getFromLocation(result.latitude, result.longitude, 1)
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+
+                    val subAdmin: String
+                    if (addresses != null && addresses.isNotEmpty()) {
+                        subAdmin = addresses[0].subAdminArea
+
+                        latitude = result.latitude
+                        longitude = result.longitude
+                        city = subAdmin
+                    } else {
+                        latitude = 0.0
+                        longitude = 0.0
+                        city = ""
+                    }
+                } else {
+                    latitude = 0.0
+                    longitude = 0.0
+                    city = ""
+                }
+            }
     }
 }

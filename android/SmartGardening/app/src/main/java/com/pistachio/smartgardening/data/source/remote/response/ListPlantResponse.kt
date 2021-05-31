@@ -5,7 +5,10 @@ import com.google.gson.annotations.SerializedName
 data class ListPlantResponse(
 
     @field:SerializedName("plant")
-    val plant: List<PlantResponse>? = null,
+    val plant: PlantResponse,
+
+    @field:SerializedName("storage")
+    val storage: String,
 
     @field:SerializedName("error")
     val error: String

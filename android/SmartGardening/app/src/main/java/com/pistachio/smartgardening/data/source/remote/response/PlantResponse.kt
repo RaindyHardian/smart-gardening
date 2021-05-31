@@ -5,29 +5,29 @@ import com.google.gson.annotations.SerializedName
 data class PlantResponse(
 
     @field:SerializedName("marketPrice")
-    val marketPrice: String? = null,
+    var marketPrice: String = "",
 
     @field:SerializedName("disease")
     val disease: List<String>? = null,
 
     @field:SerializedName("habitat")
-    val habitat: String? = null,
+    var habitat: String = "",
 
     @field:SerializedName("name")
-    val name: String? = null,
+    var name: String = "",
 
     @field:SerializedName("description")
-    val description: String? = null,
+    var description: String = "",
 
     @field:SerializedName("id")
-    val id: String? = null,
+    var id: String = "",
 
     @field:SerializedName("latinName")
-    val latinName: String? = null,
+    var latinName: String = "",
 
     @field:SerializedName("picture")
-    val picture: String? = null,
+    var picture: String = "",
 
     @field:SerializedName("bestPlacing")
-    val bestPlacing: String? = null
+    var bestPlacing: String = ""
 )

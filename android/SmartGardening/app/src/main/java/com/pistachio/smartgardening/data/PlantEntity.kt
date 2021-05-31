@@ -1,6 +1,5 @@
 package com.pistachio.smartgardening.data
 
-import android.net.Uri
 import android.os.Parcelable
 import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
@@ -42,5 +41,8 @@ data class PlantEntity(
     var marketPrice: String = "",
 
     @ColumnInfo(name = "plantImagePath")
-    var imagePath: String = ""
+    var imagePath: String = "",
+
+    @ColumnInfo(name = "plantLocation")
+    var location: String = ""
 ): Parcelable
