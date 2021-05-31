@@ -22,7 +22,7 @@ type plantImage struct {
 	Image *multipart.FileHeader `form:"image" binding:"required"`
 }
 
-var plant = []string{"Aglaonema", "Kuping Gajah", "Suplir", "Tanaman Bunga Lipstick"}
+var plant = []string{"Aglaonema", "Kuping Gajah", "Suplir", "Tanaman Bunga Lipstick", "aa"}
 
 func Detection(c *gin.Context) {
 	var form plantImage
@@ -52,6 +52,17 @@ func Detection(c *gin.Context) {
 	}
 	defer image.Close()
 
+	object := fmt.Sprint(generateName(), filepath.Ext(form.Image.Filename))
+	bucket := setting.ServerSetting.GoogleStorageBucket
+	storage, err := storage.Upload(image, object, bucket)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+			"title": "upload to cloud storage",
+		})
+		return
+	}
+
 	ml := plant[rand.Intn(len(plant))]
 
 	client := firestore.CreateClient(context.Background())
@@ -61,17 +72,6 @@ func Detection(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{
 			"detail": err.Error(),
 			"error":  "get data from database failed",
-		})
-		return
-	}
-
-	object := fmt.Sprint(generateName(), filepath.Ext(form.Image.Filename))
-	bucket := setting.ServerSetting.GoogleStorageBucket
-	storage, err := storage.Upload(image, object, bucket)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-			"title": "upload to cloud storage",
 		})
 		return
 	}
