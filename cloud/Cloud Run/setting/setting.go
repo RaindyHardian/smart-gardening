@@ -8,6 +8,7 @@ import (
 )
 
 type Server struct {
+	APIKey                    string
 	Port                      string
 	GoogleStorageBucket       string
 	GoogleProjectID           string
@@ -27,4 +28,5 @@ func Setup() {
 	ServerSetting.GoogleStorageBucket = os.Getenv("GOOGLE_STORAGE_BUCKET")
 	ServerSetting.GoogleProjectID = os.Getenv("GOOGLE_PROJECT_ID")
 	ServerSetting.GoogleFirestoreCollection = os.Getenv("GOOGLE_FIRESTORE_COLLECTION")
+	ServerSetting.APIKey = os.Getenv("API_KEY")
 }
