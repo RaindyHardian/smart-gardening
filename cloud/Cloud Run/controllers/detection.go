@@ -35,47 +35,17 @@ func Detection(c *gin.Context) {
 		return
 	}
 
-	matched, _ := regexp.MatchString("image", form.Image.Header.Values("content-type")[0])
-	if !matched {
+	if matched, _ := regexp.MatchString("image/j", form.Image.Header.Values("content-type")[0]); !matched {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "file not image",
+			"content-type": form.Image.Header.Values("content-type")[0],
+			"error":        "file not image or not supported",
 		})
 		return
 	}
 
-	// imChan := make(chan multipart.File)
-	// go func() {
-	image, err := openImage(*form.Image)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-			"title": "failed open image",
-		})
-	}
-	// 	imChan <- image
-	// }()
-	// image := <-imChan
-	defer image.Close()
-
-	// mlChan := make(chan string)
-	// go func() {
-	ml, err := predictionReq(image, setting.ServerSetting.URLPrediction, form.Image.Filename)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-			"title": "request",
-		})
-		return
-	}
-	// 	mlChan <- ml
-	// }()
-	// ml := <-mlChan
-
-	// storChan := make(chan string)
-	// go func() {
 	object := fmt.Sprint(generateName(), filepath.Ext(form.Image.Filename))
 	bucket := setting.ServerSetting.GoogleStorageBucket
-	storage, err := storage.Upload(image, object, bucket)
+	storage, err := storage.Upload(*form.Image, object, bucket, form.Image.Header.Values("content-type")[0])
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
@@ -83,12 +53,16 @@ func Detection(c *gin.Context) {
 		})
 		return
 	}
-	// 	storChan <- storage
-	// }()
-	// storage := <-storChan
 
-	// plantChan := make(chan map[string]interface{})
-	// go func() {
+	ml, err := predictionReq(*form.Image, setting.ServerSetting.URLPrediction, storage)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+			"title": "request",
+		})
+		return
+	}
+
 	client := firestore.CreateClient(context.Background())
 	defer client.Close()
 	plant, err := firestore.GetData(context.Background(), client, ml)
@@ -99,9 +73,6 @@ func Detection(c *gin.Context) {
 		})
 		return
 	}
-	// 	plantChan <- plant
-	// }()
-	// plant := <-plantChan
 
 	c.JSON(http.StatusOK, gin.H{
 		"plant":   plant,
@@ -109,24 +80,21 @@ func Detection(c *gin.Context) {
 	})
 }
 
-func openImage(file multipart.FileHeader) (multipart.File, error) {
-	image, err := file.Open()
-	if err != nil {
-		return nil, fmt.Errorf("failed open image: %v", err)
-	}
-	return image, nil
-}
-
 func generateName() string {
 	unixtime := strconv.Itoa(int(time.Now().UTC().Unix()))
 	uuid := uuid.NewString()
-	return fmt.Sprintf("%v-%v", uuid, unixtime)
+	return fmt.Sprintf("%v-%v", unixtime, uuid)
 }
 
-func predictionReq(file multipart.File, url string, filename string) (string, error) {
+func predictionReq(file multipart.FileHeader, url string, filename string) (result string, err error) {
 	r, w := io.Pipe()
 	defer r.Close()
 	m := multipart.NewWriter(w)
+	img, err := util.OpenImage(file)
+	if err != nil {
+		return "", fmt.Errorf("failed open image request: %v", err)
+	}
+	defer img.Close()
 
 	go func() {
 		defer w.Close()
@@ -137,7 +105,7 @@ func predictionReq(file multipart.File, url string, filename string) (string, er
 			w.CloseWithError(err)
 			return
 		}
-		if _, err := io.Copy(part, file); err != nil {
+		if _, err := io.Copy(part, img); err != nil {
 			log.Printf("copy: %v", err)
 			w.CloseWithError(err)
 			return
