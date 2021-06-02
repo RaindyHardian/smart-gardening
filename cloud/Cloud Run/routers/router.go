@@ -12,7 +12,7 @@ func Setup() *gin.Engine {
 	r.Use(gin.Recovery())
 	r.Use(middlewares.APIKey())
 
-	r.GET("/", controllers.IndexGet)
+	r.GET("/", controllers.Index)
 	r.POST("/detection", controllers.Detection)
 	r.GET("/plant", controllers.GetDataByName)
 
