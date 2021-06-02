@@ -14,7 +14,7 @@ func Upload(image multipart.File, object string, bucket string) (interface{}, er
 	ctx := context.Background()
 	client, err := storage.NewClient(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create client: %v", err)
+		return "", fmt.Errorf("failed to create client: %v", err)
 	}
 	defer client.Close()
 
@@ -23,10 +23,10 @@ func Upload(image multipart.File, object string, bucket string) (interface{}, er
 
 	wc := client.Bucket(bucket).Object(object).NewWriter(ctx)
 	if _, err = io.Copy(wc, image); err != nil {
-		return nil, fmt.Errorf("failed copy: %v", err)
+		return "", fmt.Errorf("failed copy: %v", err)
 	}
 	if err := wc.Close(); err != nil {
-		return nil, fmt.Errorf("Writer.Close: %v", err)
+		return "", fmt.Errorf("Writer.Close: %v", err)
 	}
 
 	return wc.Attrs().Name, nil
