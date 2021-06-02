@@ -10,7 +10,7 @@ import (
 	"cloud.google.com/go/storage"
 )
 
-func Upload(image multipart.File, object string, bucket string) (filename string, err error) {
+func Upload(image multipart.File, object string, bucket string) (interface{}, error) {
 	ctx := context.Background()
 	client, err := storage.NewClient(ctx)
 	if err != nil {
