@@ -133,24 +133,18 @@ func predictionReq(file multipart.File, url string, filename string) (string, er
 		defer m.Close()
 		part, err := m.CreateFormFile("file", filename)
 		if err != nil {
-			log.Println(err)
+			log.Printf("create form file: %v", err)
 			w.CloseWithError(err)
 			return
 		}
 		if _, err := io.Copy(part, file); err != nil {
-			log.Println(err)
+			log.Printf("copy: %v", err)
 			w.CloseWithError(err)
 			return
 		}
 	}()
 
-	req, err := http.NewRequest(http.MethodPost, url, r)
-	if err != nil {
-		return "", err
-	}
-	req.Header.Add("content-type", m.FormDataContentType())
-
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := http.Post(url, m.FormDataContentType(), r)
 	if err != nil {
 		return "", err
 	}
@@ -162,7 +156,7 @@ func predictionReq(file multipart.File, url string, filename string) (string, er
 
 	body, err := util.Bodytojson(resp.Body)
 	if err != nil {
-		return "", fmt.Errorf("lala: %v", err)
+		return "", fmt.Errorf("body to json: %v", err)
 	}
 
 	return fmt.Sprintf("%v", body["result"]), err
