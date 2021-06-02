@@ -43,65 +43,65 @@ func Detection(c *gin.Context) {
 		return
 	}
 
-	imChan := make(chan multipart.File)
-	go func() {
-		image, err := openImage(*form.Image)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"error": err.Error(),
-				"title": "failed open image",
-			})
-		}
-		imChan <- image
-	}()
-	image := <-imChan
+	// imChan := make(chan multipart.File)
+	// go func() {
+	image, err := openImage(*form.Image)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+			"title": "failed open image",
+		})
+	}
+	// 	imChan <- image
+	// }()
+	// image := <-imChan
 	defer image.Close()
 
-	mlChan := make(chan string)
-	go func() {
-		ml, err := predictionReq(image, setting.ServerSetting.URLPrediction, form.Image.Filename)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"error": err.Error(),
-				"title": "request",
-			})
-			return
-		}
-		mlChan <- ml
-	}()
-	ml := <-mlChan
+	// mlChan := make(chan string)
+	// go func() {
+	ml, err := predictionReq(image, setting.ServerSetting.URLPrediction, form.Image.Filename)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+			"title": "request",
+		})
+		return
+	}
+	// 	mlChan <- ml
+	// }()
+	// ml := <-mlChan
 
-	storChan := make(chan string)
-	go func() {
-		object := fmt.Sprint(generateName(), filepath.Ext(form.Image.Filename))
-		bucket := setting.ServerSetting.GoogleStorageBucket
-		storage, err := storage.Upload(image, object, bucket)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"error": err.Error(),
-				"title": "upload to cloud storage",
-			})
-			return
-		}
-		storChan <- storage
-	}()
-	storage := <-storChan
+	// storChan := make(chan string)
+	// go func() {
+	object := fmt.Sprint(generateName(), filepath.Ext(form.Image.Filename))
+	bucket := setting.ServerSetting.GoogleStorageBucket
+	storage, err := storage.Upload(image, object, bucket)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+			"title": "upload to cloud storage",
+		})
+		return
+	}
+	// 	storChan <- storage
+	// }()
+	// storage := <-storChan
 
-	plantChan := make(chan map[string]interface{})
-	go func() {
-		client := firestore.CreateClient(context.Background())
-		defer client.Close()
-		plant, err := firestore.GetData(context.Background(), client, ml)
-		if err != nil {
-			c.JSON(http.StatusNotFound, gin.H{
-				"detail": err.Error(),
-				"error":  "get data from database failed",
-			})
-			return
-		}
-		plantChan <- plant
-	}()
-	plant := <-plantChan
+	// plantChan := make(chan map[string]interface{})
+	// go func() {
+	client := firestore.CreateClient(context.Background())
+	defer client.Close()
+	plant, err := firestore.GetData(context.Background(), client, ml)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"detail": err.Error(),
+			"error":  "get data from database failed",
+		})
+		return
+	}
+	// 	plantChan <- plant
+	// }()
+	// plant := <-plantChan
 
 	c.JSON(http.StatusOK, gin.H{
 		"plant":   plant,
