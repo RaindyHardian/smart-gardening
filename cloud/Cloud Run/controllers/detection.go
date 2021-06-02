@@ -133,12 +133,12 @@ func predictionReq(file multipart.File, url string, filename string) (string, er
 		defer m.Close()
 		part, err := m.CreateFormFile("file", filename)
 		if err != nil {
-			log.Println("a")
+			log.Println(err)
 			w.CloseWithError(err)
 			return
 		}
 		if _, err := io.Copy(part, file); err != nil {
-			log.Println("b")
+			log.Println(err)
 			w.CloseWithError(err)
 			return
 		}
