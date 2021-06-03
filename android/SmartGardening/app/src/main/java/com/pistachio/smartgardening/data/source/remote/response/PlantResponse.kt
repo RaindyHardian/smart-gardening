@@ -25,9 +25,6 @@ data class PlantResponse(
     @field:SerializedName("latinName")
     var latinName: String = "",
 
-    @field:SerializedName("picture")
-    var picture: String = "",
-
     @field:SerializedName("bestPlacing")
     var bestPlacing: String = ""
 )

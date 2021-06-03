@@ -115,7 +115,7 @@ class CameraActivity : AppCompatActivity() {
         binding.btnConfirm.setOnClickListener {
             binding.progressBar.visibility = View.VISIBLE
             // SEND API
-            var requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), imageFile)
+            var requestFile = RequestBody.create("image/jpg".toMediaTypeOrNull(), imageFile)
             val body: MultipartBody.Part =
                 MultipartBody.Part.createFormData("image", imageFile.name, requestFile)
             val client = ApiConfig.getApiService().postImage(body)
@@ -131,9 +131,8 @@ class CameraActivity : AppCompatActivity() {
                         // if success then send the response to detail -> use response.body()?.plant or convert into Entity
                         val plantData = response.body()?.plant?.let { it1 ->
                             DataMapper.mapResponsesToEntities(
-                                it1, city)
+                                it1, city, imageFile.absolutePath)
                         }
-                        plantData?.imagePath = imageFile.absolutePath
 
                         val moveDetail = Intent(this@CameraActivity, DetailActivity::class.java)
                         moveDetail.putExtra(DetailActivity.EXTRA_PLANT, plantData)
@@ -142,7 +141,7 @@ class CameraActivity : AppCompatActivity() {
                         finish()
                     } else {
                         Log.e(
-                            "API NOT SUCESS",
+                            "API NOT SUCCESS",
                             "UPLOADED BUT ERROR: ${response.message()} & ${response.body()?.error.toString()}"
                         )
                         Toast.makeText(
