@@ -29,13 +29,26 @@ func AddData(ctx context.Context, client *firestore.Client, document string, dat
 	return nil
 }
 
-func GetData(ctx context.Context, client *firestore.Client, name string) (map[string]interface{}, error) {
-	doc, err := client.Collection(setting.ServerSetting.GoogleFirestoreCollection).Where("name", "==", name).Documents(ctx).GetAll()
+func GetData(ctx context.Context, client *firestore.Client, name string) (plant map[string]interface{}, err error) {
+	docPlant, err := client.Collection(setting.ServerSetting.GoogleFirestoreCollection).Where("name", "==", name).Documents(ctx).GetAll()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("firestore query plant: %v", err)
 	}
-	if len(doc) == 0 {
-		return nil, errors.New("data not found")
+	if len(docPlant) == 0 {
+		return nil, errors.New("data plant not found")
 	}
-	return doc[0].Data(), nil
+
+	plant = docPlant[0].Data()
+
+	disease := map[string]interface{}{}
+	for _, s := range plant["disease"].([]interface{}) {
+		docDisease, err := client.Collection("disease").Doc(s.(string)).Get(ctx)
+		if err != nil {
+			return nil, fmt.Errorf("firestore query disease: %v", err)
+		}
+		disease[s.(string)] = docDisease.Data()
+	}
+	plant["disease"] = disease
+
+	return plant, nil
 }
