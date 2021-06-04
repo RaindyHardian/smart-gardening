@@ -40,13 +40,13 @@ func GetData(ctx context.Context, client *firestore.Client, name string) (plant 
 
 	plant = docPlant[0].Data()
 
-	disease := map[string]interface{}{}
+	disease := []map[string]interface{}{}
 	for _, s := range plant["disease"].([]interface{}) {
 		docDisease, err := client.Collection("disease").Doc(s.(string)).Get(ctx)
 		if err != nil {
 			return nil, fmt.Errorf("firestore query disease: %v", err)
 		}
-		disease[s.(string)] = docDisease.Data()
+		disease = append(disease, docDisease.Data())
 	}
 	plant["disease"] = disease
 
