@@ -41,6 +41,15 @@ data class PlantEntity(
     @ColumnInfo(name = "plantMarketPrice")
     var marketPrice: String = "",
 
+    @ColumnInfo(name = "tips")
+    var tips: String = "",
+
+    @ColumnInfo(name = "watering")
+    var watering: String = "",
+
+    @ColumnInfo(name = "fertilizer")
+    var fertilizer: String = "",
+
     @ColumnInfo(name = "plantImagePath")
     var imagePath: String = "",
 

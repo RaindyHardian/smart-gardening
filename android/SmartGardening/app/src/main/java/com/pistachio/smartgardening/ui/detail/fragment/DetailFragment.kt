@@ -26,5 +26,8 @@ class DetailFragment : Fragment() {
         binding.txtDescription.text = plant.description
         binding.txtHabitat.text = plant.habitat
         binding.txtMarketPrice.text = plant.marketPrice
+        binding.txtWatering.text = plant.watering
+        binding.txtFertilizer.text = plant.fertilizer
+        binding.txtTips.text = plant.tips
     }
 }

@@ -30,6 +30,9 @@ object DataMapper {
             bestPlacing = input.bestPlacing,
             disease = diseaseList,
             marketPrice = input.marketPrice,
+            watering = input.watering,
+            fertilizer = input.fertilizer,
+            tips = input.tips,
             imagePath = image,
             location = location,
             date = date

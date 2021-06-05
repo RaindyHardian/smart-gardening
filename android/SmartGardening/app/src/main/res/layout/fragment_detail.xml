@@ -119,6 +119,87 @@
             app:layout_constraintTop_toBottomOf="@+id/textView4"
             tools:text="Market price text" />
 
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/watering"
+            android:textColor="@color/text_color"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtMarketPrice" />
+
+        <TextView
+            android:id="@+id/txtWatering"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="17dp"
+            android:layout_marginStart="8dp"
+            android:justificationMode="inter_word"
+            android:textColor="@color/text_color"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView5"
+            tools:text="Watering text" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/fertilizer"
+            android:textColor="@color/text_color"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtWatering" />
+
+        <TextView
+            android:id="@+id/txtFertilizer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="17dp"
+            android:layout_marginStart="8dp"
+            android:justificationMode="inter_word"
+            android:textColor="@color/text_color"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView6"
+            tools:text="Fertilizer text" />
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/tips"
+            android:textColor="@color/text_color"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtFertilizer" />
+
+        <TextView
+            android:id="@+id/txtTips"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="17dp"
+            android:layout_marginStart="8dp"
+            android:justificationMode="inter_word"
+            android:textColor="@color/text_color"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView7"
+            tools:text="Tips text" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

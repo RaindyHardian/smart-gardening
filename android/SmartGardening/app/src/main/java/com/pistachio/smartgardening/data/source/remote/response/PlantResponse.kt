@@ -27,5 +27,14 @@ data class PlantResponse(
     var latinName: String = "",
 
     @field:SerializedName("bestPlacing")
-    var bestPlacing: String = ""
+    var bestPlacing: String = "",
+
+    @field:SerializedName("tips")
+    var tips: String = "",
+
+    @field:SerializedName("watering")
+    var watering: String = "",
+
+    @field:SerializedName("fertilizer")
+    var fertilizer: String = "",
 )

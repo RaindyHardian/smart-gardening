@@ -20,4 +20,7 @@
     <string name="cause">Cause:</string>
     <string name="resolve">Best treatment:</string>
     <string name="about_this_plant">About This Plant</string>
+    <string name="watering">Watering:</string>
+    <string name="fertilizer">Fertilizer:</string>
+    <string name="tips">Tips:</string>
 </resources>
