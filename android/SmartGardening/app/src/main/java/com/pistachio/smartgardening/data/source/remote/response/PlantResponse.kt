@@ -9,7 +9,7 @@ data class PlantResponse(
     var marketPrice: String = "",
 
     @field:SerializedName("disease")
-    val disease: List<DiseaseEntity> = listOf(),
+    val disease: List<DiseaseItemResponse?>? = null,
 
     @field:SerializedName("habitat")
     var habitat: String = "",
