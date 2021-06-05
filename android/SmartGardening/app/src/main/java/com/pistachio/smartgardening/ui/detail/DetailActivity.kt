@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.pistachio.smartgardening.data.PlantEntity
+import com.pistachio.smartgardening.data.entity.PlantEntity
 import com.pistachio.smartgardening.databinding.ActivityDetailBinding
 import com.pistachio.smartgardening.databinding.PlantDetailBinding
 import com.pistachio.smartgardening.utils.ViewModelFactory
@@ -23,13 +23,20 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         detailBinding = binding.detailContent
+        val plant = intent.getParcelableExtra<PlantEntity>(EXTRA_PLANT) as PlantEntity
+        val status = intent.getIntExtra(EXTRA_STATUS, 404)
+
+        val plantBundle = Bundle()
+        plantBundle.putParcelable("extra_bundle",plant)
+
+        val sectionsPagerAdapter = SectionPagerAdapter(this, supportFragmentManager, plantBundle)
+        binding.viewPager.adapter = sectionsPagerAdapter
+        binding.tabs.setupWithViewPager(binding.viewPager)
 
         setContentView(binding.root)
         supportActionBar?.title = "Plant Details"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val plant = intent.getParcelableExtra<PlantEntity>(EXTRA_PLANT) as PlantEntity
-        val status = intent.getIntExtra(EXTRA_STATUS, 404)
         val factory = ViewModelFactory.getInstance(this.application)
         viewModel = ViewModelProvider(this, factory)[DetailViewModel::class.java]
         loadPlant(plant)
@@ -41,22 +48,6 @@ class DetailActivity : AppCompatActivity() {
     private fun loadPlant(plantEntity: PlantEntity){
         detailBinding.txtPlantName.text = plantEntity.name
         detailBinding.txtPlantLatinName.text = plantEntity.latinName
-        detailBinding.txtDescription.text = plantEntity.description
-        detailBinding.txtHabitat.text = plantEntity.habitat
-        detailBinding.txtBestPlacing.text = plantEntity.bestPlacing
-        detailBinding.txtMarketPrice.text = plantEntity.marketPrice
-
-        var diseaseString = ""
-        var diseaseCount = plantEntity.disease.size
-        for (i in 0..diseaseCount - 1){
-            if(i == 0){
-                diseaseString += plantEntity.disease.get(i)
-            }else{
-                diseaseString += ", ${plantEntity.disease.get(i)}"
-            }
-        }
-
-        detailBinding.txtDisease.text = diseaseString
 
         val imgFile = File(plantEntity.imagePath)
 

@@ -2,7 +2,7 @@ package com.pistachio.smartgardening.data.source.local.repository
 
 import android.app.Application
 import androidx.lifecycle.LiveData
-import com.pistachio.smartgardening.data.PlantEntity
+import com.pistachio.smartgardening.data.entity.PlantEntity
 import com.pistachio.smartgardening.data.source.local.room.PlantDao
 import com.pistachio.smartgardening.data.source.local.room.PlantRoomDatabase
 import java.util.concurrent.ExecutorService

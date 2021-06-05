@@ -46,6 +46,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 import java.io.IOException
+import java.text.DateFormat
+import java.text.DateFormat.getDateInstance
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.Locale
@@ -131,7 +133,7 @@ class CameraActivity : AppCompatActivity() {
                         // if success then send the response to detail -> use response.body()?.plant or convert into Entity
                         val plantData = response.body()?.plant?.let { it1 ->
                             DataMapper.mapResponsesToEntities(
-                                it1, city, imageFile.absolutePath)
+                                it1, city, imageFile.absolutePath, getDateInstance(DateFormat.DATE_FIELD).format(Date()))
                         }
 
                         val moveDetail = Intent(this@CameraActivity, DetailActivity::class.java)

@@ -3,7 +3,7 @@ package com.pistachio.smartgardening.ui.history
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.pistachio.smartgardening.data.PlantEntity
+import com.pistachio.smartgardening.data.entity.PlantEntity
 import com.pistachio.smartgardening.data.source.local.repository.PlantRepository
 
 class HistoryViewModel(application: Application) : ViewModel() {

@@ -1,20 +1,21 @@
 package com.pistachio.smartgardening.ui.history
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.pistachio.smartgardening.R
 import com.pistachio.smartgardening.databinding.ActivityHistoryBinding
 import com.pistachio.smartgardening.ui.adapter.PlantAdapter
 import com.pistachio.smartgardening.utils.ViewModelFactory
+import java.io.File
 
 class HistoryActivity : AppCompatActivity() {
-
+    private val dir = "/storage/emulated/0/Android/media/com.pistachio.smartgardening/Smart Gardening"
     private lateinit var binding: ActivityHistoryBinding
     private lateinit var viewModel: HistoryViewModel
     private var listEmpty = false
@@ -71,6 +72,14 @@ class HistoryActivity : AppCompatActivity() {
                     setNegativeButton("Cancel", null)
                     setPositiveButton("Yes"){dialogInterface, which ->
                         viewModel.clearAll()
+                        val file = File(dir)
+                        val files = file.list()
+                        if(files != null){
+                            for (i in files.indices) {
+                                val myFile = File(file, files[i])
+                                myFile.delete()
+                            }
+                        }
                     }
                     show()
                 }

@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.pistachio.smartgardening.data.PlantEntity
+import com.pistachio.smartgardening.data.entity.PlantEntity
 import com.pistachio.smartgardening.databinding.ItemListPlantBinding
 import com.pistachio.smartgardening.ui.detail.DetailActivity
 import java.io.File
@@ -21,8 +21,8 @@ class PlantAdapter : RecyclerView.Adapter<PlantAdapter.PlantViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlantViewHolder {
-        val itemsAcademyBinding = ItemListPlantBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PlantViewHolder(itemsAcademyBinding)
+        val itemsPlantBinding = ItemListPlantBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return PlantViewHolder(itemsPlantBinding)
     }
 
     override fun onBindViewHolder(holder: PlantViewHolder, position: Int) {
@@ -38,6 +38,7 @@ class PlantAdapter : RecyclerView.Adapter<PlantAdapter.PlantViewHolder>() {
             with(binding) {
                 txtPlantName.text = plantEntity.name
                 txtPlantLocation.text = plantEntity.location
+                txtDateImageTaken.text = plantEntity.date
                 val imgFile = File(plantEntity.imagePath)
                 if (imgFile.exists()) {
                     Glide.with(itemView.context).load(imgFile).into(imgItemPhoto)

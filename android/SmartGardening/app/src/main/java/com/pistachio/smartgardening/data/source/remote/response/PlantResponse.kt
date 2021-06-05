@@ -1,6 +1,7 @@
 package com.pistachio.smartgardening.data.source.remote.response
 
 import com.google.gson.annotations.SerializedName
+import com.pistachio.smartgardening.data.entity.DiseaseEntity
 
 data class PlantResponse(
 
@@ -8,7 +9,7 @@ data class PlantResponse(
     var marketPrice: String = "",
 
     @field:SerializedName("disease")
-    val disease: List<String>? = null,
+    val disease: List<DiseaseEntity> = listOf(),
 
     @field:SerializedName("habitat")
     var habitat: String = "",

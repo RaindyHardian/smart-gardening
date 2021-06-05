@@ -1,4 +1,4 @@
-package com.pistachio.smartgardening.data
+package com.pistachio.smartgardening.data.entity
 
 import android.os.Parcelable
 import androidx.annotation.NonNull
@@ -6,6 +6,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
+import kotlinx.android.parcel.RawValue
 
 @Parcelize
 @Entity(tableName = "plantEntities")
@@ -35,7 +36,7 @@ data class PlantEntity(
     var bestPlacing: String = "",
 
     @ColumnInfo(name = "plantDisease")
-    var disease: List<String> = listOf(),
+    var disease: @RawValue List<DiseaseEntity> = listOf(),
 
     @ColumnInfo(name = "plantMarketPrice")
     var marketPrice: String = "",
@@ -44,5 +45,8 @@ data class PlantEntity(
     var imagePath: String = "",
 
     @ColumnInfo(name = "plantLocation")
-    var location: String = ""
+    var location: String = "",
+
+    @ColumnInfo(name = "imgDate")
+    var date: String
 ): Parcelable

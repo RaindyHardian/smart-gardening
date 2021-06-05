@@ -2,7 +2,7 @@ package com.pistachio.smartgardening.data.source.local.room
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.pistachio.smartgardening.data.PlantEntity
+import com.pistachio.smartgardening.data.entity.PlantEntity
 
 @Dao
 interface PlantDao {
