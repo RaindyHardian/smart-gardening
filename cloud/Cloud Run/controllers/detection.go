@@ -65,7 +65,7 @@ func Detection(c *gin.Context) {
 
 	client := firestore.CreateClient(context.Background())
 	defer client.Close()
-	plant, err := firestore.GetData(context.Background(), client, ml)
+	plant, err := firestore.GetDataPlant(context.Background(), client, ml)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
 			"detail": err.Error(),

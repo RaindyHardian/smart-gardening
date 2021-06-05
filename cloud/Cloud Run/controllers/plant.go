@@ -12,7 +12,7 @@ func GetDataByName(c *gin.Context) {
 	client := firestore.CreateClient(context.Background())
 	defer client.Close()
 	name := c.Query("name")
-	data, err := firestore.GetData(context.Background(), client, name)
+	data, err := firestore.GetDataPlant(context.Background(), client, name)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
 			"detail": err.Error(),
