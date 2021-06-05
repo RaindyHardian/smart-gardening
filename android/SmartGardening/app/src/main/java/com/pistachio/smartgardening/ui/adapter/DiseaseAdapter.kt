@@ -2,6 +2,7 @@ package com.pistachio.smartgardening.ui.adapter
 
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.pistachio.smartgardening.data.entity.DiseaseEntity
@@ -42,6 +43,11 @@ class DiseaseAdapter : RecyclerView.Adapter<DiseaseAdapter.DiseaseViewHolder>() 
             with(binding) {
                 txtDiseaseName.text = diseaseEntity.name
                 txtDiseaseLatinName.text = diseaseEntity.latinName
+                /* Does not work
+                if(diseaseEntity.latinName == null){
+                    txtDiseaseLatinName.visibility = View.GONE
+                }
+                */
             }
         }
     }

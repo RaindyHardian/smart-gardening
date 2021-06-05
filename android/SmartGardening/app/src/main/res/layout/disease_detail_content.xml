@@ -52,7 +52,7 @@
             app:layout_constraintTop_toBottomOf="@+id/txt_disease_name" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/tv_type_deisease"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -75,12 +75,12 @@
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            app:layout_constraintTop_toBottomOf="@+id/tv_type_deisease"
             tools:text="Type of disease text" />
 
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/tv_habitat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -103,11 +103,38 @@
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3"
+            app:layout_constraintTop_toBottomOf="@+id/tv_habitat"
             tools:text="Disease habitat text" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/tv_cause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="13dp"
+            android:text="@string/cause"
+            android:textColor="@color/text_color"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_habitat" />
+
+        <TextView
+            android:id="@+id/txt_cause"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="17dp"
+            android:layout_marginStart="8dp"
+            android:justificationMode="inter_word"
+            android:textColor="@color/text_color"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_cause"
+            tools:text="Cause of disease text" />
+
+        <TextView
+            android:id="@+id/tv_treatment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="13dp"
@@ -117,7 +144,7 @@
             android:textStyle="bold"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_habitat" />
+            app:layout_constraintTop_toBottomOf="@+id/txt_cause" />
 
         <TextView
             android:id="@+id/txt_best_treatment"
@@ -130,7 +157,7 @@
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4"
+            app:layout_constraintTop_toBottomOf="@+id/tv_treatment"
             tools:text="Best treatment text" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

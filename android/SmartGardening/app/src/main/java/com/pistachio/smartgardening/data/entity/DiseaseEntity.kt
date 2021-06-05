@@ -13,7 +13,7 @@ data class DiseaseEntity(
     var name: String = "",
 
     @field:SerializedName("latinName")
-    var latinName: String = "",
+    var latinName: String?,
 
     @field:SerializedName("description")
     var description: String = "",
@@ -22,7 +22,10 @@ data class DiseaseEntity(
     var type: String = "",
 
     @field:SerializedName("habitat")
-    var habitat: String = "",
+    var habitat: String?,
+
+    @field:SerializedName("cause")
+    var cause: String?,
 
     @field:SerializedName("resolve")
     var resolve: String = ""

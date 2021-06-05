@@ -52,7 +52,17 @@ class DiseaseFragment : Fragment() {
                     txtDescription.text = data.description
                     txtTypeOfDisease.text = data.type
                     txtHabitat.text = data.habitat
+                    txtCause.text = data.cause
                     txtBestTreatment.text = data.resolve
+
+                    if(data.cause == null){
+                        tvCause.visibility = View.GONE
+                        txtCause.visibility = View.GONE
+                    }
+                    if(data.habitat == null){
+                        tvHabitat.visibility = View.GONE
+                        txtHabitat.visibility = View.GONE
+                    }
                 }
                 dialogBuilder.setView(detailContentBinding.root)
                 dialogBuilder.create().show()

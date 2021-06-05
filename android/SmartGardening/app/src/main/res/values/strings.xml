@@ -17,7 +17,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="click_to_see_details">Click to see details</string>
     <string name="type_of_disease">Type of disease:</string>
-    <string name="cause">Cause</string>
-    <string name="resolve">Best treatment</string>
+    <string name="cause">Cause:</string>
+    <string name="resolve">Best treatment:</string>
     <string name="about_this_plant">About This Plant</string>
 </resources>
