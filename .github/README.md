@@ -11,7 +11,7 @@ This project created to accomplish [Bangkit 2021](https://grow.google/intl/id_id
 
 ### :iphone: Android
 
-- Kotlin
+- [Kotlin](https://kotlinlang.org/)
 
 ### :robot: Machine Learning
 
