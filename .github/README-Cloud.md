@@ -38,6 +38,7 @@
     ```
 
 - Docker
+
   Because `Dockerfile` create specific for deploy at production if you want to try in local you need edit `Dockerfile` a little bit, add this command:
 
   ```Dockerfile
@@ -51,19 +52,19 @@
   COPY keys.json ./`
   ```
 
-- Run this command to build images:
+  - Run this command to build images:
   
-  ```bash
-  docker build -t [YOUR_IMAGE_NAME] .
-  ```
-
-- Run this command to run docker container:
-
     ```bash
-    docker run -p 8080:8080 [YOUR_IMAGE_NAME]
+    docker build -t [YOUR_IMAGE_NAME] .
     ```
 
-Change `[YOUR_IMAGE_NAME]` with your choosen name e.g `lorem`
+  - Run this command to run docker container:
+
+      ```bash
+      docker run -p 8080:8080 [YOUR_IMAGE_NAME]
+      ```
+
+  Change `[YOUR_IMAGE_NAME]` with your choosen name e.g `lorem`
 
 ### Flask (Python)
 
@@ -77,33 +78,33 @@ Change `[YOUR_IMAGE_NAME]` with your choosen name e.g `lorem`
     Change `[NAME_VENV]` to your choosen name
 
     For Windows, or MacOS maybe different
-  - Install Depedencies
+- Install Depedencies
 
-    ```bash
-    pip install -r requirements.txt
+  ```bash
+  pip install -r requirements.txt
+  ```
+
+- Locate Model
+  - if the Model not located at same root as flask app (`cloud/flask`), you can change it at `app.py`
+
+    ```python
+    model_path = 'YOUR_MODEL_PATH'
     ```
 
-  - Locate Model
-    - if the Model not located at same root as flask app (`cloud/flask`), you can change it at `app.py`
+- Run Flask App
+  - Python
+    - type at terminal:
 
-      ```python
-      model_path = 'YOUR_MODEL_PATH'
+      ```bash
+      python3 app.py
       ```
 
-  - Run Flask App
-    - Python
-      - type at terminal:
+  - Gunicorn
+    - type at terminal:
 
-        ```bash
-        python3 app.py
-        ```
-
-    - Gunicorn
-      - type at terminal:
-
-        ```bash
-        gunicorn -w 4 -b 0.0.0.0:8000 app:app
-        ```
+      ```bash
+      gunicorn -w 4 -b 0.0.0.0:8000 app:app
+      ```
 
 ## :cloud: Deploy to Google Cloud Platform
 
