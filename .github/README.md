@@ -29,6 +29,7 @@ This project created to accomplish [Bangkit 2021](https://grow.google/intl/id_id
   - [Compute Engine](https://cloud.google.com/compute) (Flask Prediction API)
   - [Container Registry](https://cloud.google.com/container-registry) (Docker Images)
   - [Firestore](https://cloud.google.com/firestore) (Database)
+  - [Secret Manager](https://cloud.google.com/secret-manager) (Store API Key)
 
 ## :eyes: Replicate
 
