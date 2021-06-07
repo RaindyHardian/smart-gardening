@@ -1,5 +1,9 @@
 # :cloud: Cloud Getting Started
 
+## Lite Version
+
+[README-Cloud-Lite.md](README-Cloud-Lite.md)
+
 ## :gear: Prerequisites
 
 - Clone this repo
