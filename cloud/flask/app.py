@@ -2,11 +2,12 @@
 from PIL import Image
 from io import BytesIO
 from flask import Flask, request, jsonify
-from keras.preprocessing.image import img_to_array
-from keras.models import load_model
+from tensorflow.keras.preprocessing.image import img_to_array
+from tensorflow.keras.models import load_model
 import numpy as np
+import os
 
-model_path = '5_model_akurasi_93_91_93.h5'
+model_path = 'model/5_model_akurasi_93_91_93.h5'
 model = load_model(model_path)
 
 
@@ -23,8 +24,11 @@ def predict(file):
 
 app = Flask(__name__)
 
+@app.route("/")
+def hello():
+    return "Machine Learning Prediction Endpoint"
 
-@app.route('/', methods=['POST'])
+@app.route('/predict', methods=['POST'])
 def upload_file():
     if request.method == 'POST':
         file = request.files['file'].read()
@@ -51,5 +55,4 @@ def upload_file():
 
 
 if __name__ == "__main__":
-    app.debug = False
-    app.run(host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get("PORT", 8080)))
