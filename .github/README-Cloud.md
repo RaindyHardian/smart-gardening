@@ -1,5 +1,9 @@
 # :cloud: Cloud Getting Started
 
+## Architecture
+
+![architecture](img/Smart%20Gardening%20Architecture%20Cloud%20Run%20Compute%20Engine.png)
+
 ## Lite Version
 
 [README-Cloud-Lite.md](README-Cloud-Lite.md)
